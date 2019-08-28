@@ -5,7 +5,7 @@ on:
 name: master
 jobs:
   crawl:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
     - name: checkout reffy
       uses: actions/checkout@master
@@ -15,6 +15,9 @@ jobs:
         repository: foolip/reffy-reports
         token: ${{ secrets.REFFY_REPORTS_TOKEN }}
         path: reffy-reports
+    - uses: actions/setup-node@master
+      with:
+        node-version: '10.x'
     - name: install pandoc
       run: sudo apt-get install pandoc
     - name: npm install
