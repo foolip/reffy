@@ -8,13 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Install Pandoc
-      run: sudo apt-get install pandoc
-    - name: Install dependencies
-      run: npm ci
-    - name: Create config.json
-      run: echo "$CONFIG_JSON" | base64 --decode > config.json
-      env:
-        CONFIG_JSON: ${{ secrets.CONFIG_JSON }}
-    - name: Crawl
-      run: npm run whatwg
+    - run: node --version
+    - run: sudo apt-get install pandoc
+    - run: npm ci
+    - run: echo "${{ secrets.CONFIG_JSON }}" | base64 --decode > config.json
+    - run: npm run whatwg
+    - run: git status
+    - uses: actions/checkout@master
+      with:
+        repository: https://github.com/foolip/reffy-reports.git
+        token: ${{ secrets.REFFY_REPORTS_TOKEN }}
+        path: reffy-reports
+    - run: git status
