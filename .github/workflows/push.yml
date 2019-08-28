@@ -7,16 +7,21 @@ jobs:
   crawl:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - run: node --version
-    - run: sudo apt-get install pandoc
-    - run: npm ci
-    - run: echo "${{ secrets.CONFIG_JSON }}" | base64 --decode > config.json
-    - run: npm run whatwg
-    - run: git status
-    - uses: actions/checkout@master
+    - name: checkout reffy
+      uses: actions/checkout@master
+    - name: checkout reffy-reports
+      uses: actions/checkout@master
       with:
-        repository: https://github.com/foolip/reffy-reports.git
+        repository: foolip/reffy-reports
         token: ${{ secrets.REFFY_REPORTS_TOKEN }}
         path: reffy-reports
+    - name: install pandoc
+      run: sudo apt-get install pandoc
+    - name: npm install
+      run: npm ci
+    - name: create config.json
+      run: echo "${{ secrets.CONFIG_JSON }}" | base64 --decode > config.json
+    - name: crawl
+      run: npm run whatwg
     - run: git status
+    - run: find reports
